@@ -5,58 +5,44 @@ Pour se faire, vous devrez demander des lignes jusqu'à ce que le texte soit ég
 Vous devez également utiliser une liste pour stocker chaque ligne de texte.
 Finalement, affichez le contenu du fichier à l'utilisateur clairement.
 """
-import os
 
-def entrer_texte(nom_fichier):
+def ecrire_lignes():
     """
-    Entrer le texte qui sera écrit dans le fichier
-    :param nom_fichier: Nom du fichier
-    :return: Liste des lignes de texte
+    Demander le texte à écrire dans le fichier
+    :return: La liste dans laquelle est inscrit le texte
     """
-    lignes = []
-    print("Entrez les lignes de texte. Tapez 'EOF' sur une ligne vide pour terminer.")
-
+    list = []
     while True:
-        ligne = input("Entrez votre texte: ")
-        if ligne.lower() == 'eof':
+        texte = input("Entrez le texte à écrire dans le fichier : ")
+        while True:
+            list.append(texte)
             break
-        lignes.append(ligne)
-
-    # Écrire dans le fichier
-    with open(nom_fichier, "w") as fichier:
-        for ligne in lignes:
-            fichier.write(ligne + '\n')  # Ajouter un retour à la ligne entre chaque ligne
-
-    return lignes
-
-
-def afficher_contenu(nom_fichier):
+        # Écrire dans le fichier
+        with open(nom_fichier, "w") as fichier:
+            for e in list:
+                fichier.write(e + "\n")
+        if texte == "EOF":
+            break
+def lire_fichier():
     """
-    Affiche le contenu du fichier s'il existe
-    :param nom_fichier: Nom du fichier
-    :return: None
+    Lire le contenu du fichier et l'afficher
+    :return: Le texte provenant du fichier
     """
     with open(nom_fichier, "r") as fichier:
+        ecrire_lignes()
         contenu = fichier.read()
         print(f"Le texte provenant du fichier {nom_fichier} est :\n{contenu}")
 
 
-
-# Demander le nom du fichier à utiliser
-caract_non_acceptes = [",", ">", ":", '"', "/", "\\", "|", "?", "*"]
-try:
+if __name__ == "__main__":
+    # Demander le nom du fichier à utiliser
+    caracteres = "<, >, :, “, /, \, |, ?, *"
     while True:
         nom_fichier = input("Entrez le nom du fichier : ")
-        if any(c in caract_non_acceptes for c in nom_fichier):
-            print(f"Veuillez entrer un nom de fichier valide...\nCaractères non acceptés: , >, :, \", /, \\, |, ?, *")
+        if any(c in caracteres for c in nom_fichier):
+            print("Veuillez entrer un nom de fichier valide... \n"
+                  "Caractères non_acceptés: <, >, :, “, /, \, |, ?, *")
+            continue
         else:
+            lire_fichier()
             break
-except OSError:
-    print("Le nom de fichier entré n'est pas valide...")
-
-# Appeler la fonction pour entrer le texte
-lignes_enregistrees = entrer_texte(nom_fichier)
-
-# Appeler la fonction pour afficher le contenu du fichier
-afficher_contenu(nom_fichier)
-
